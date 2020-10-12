@@ -53,6 +53,26 @@ public class PortablePerson
 
     // ----- accessors ------------------------------------------------------
 
+    public String getName()
+        {
+        return m_sName;
+        }
+
+    public void setName(String name)
+        {
+        m_sName = name;
+        }
+
+    public Date getDOB()
+        {
+            return m_dtDOB;
+        }
+
+    public void setDOB(Date date)
+        {
+            m_dtDOB = date;
+        }
+
     public Address getAddress()
         {
         return m_addr;
