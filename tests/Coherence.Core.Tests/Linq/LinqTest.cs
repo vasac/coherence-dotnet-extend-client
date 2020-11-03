@@ -39,6 +39,20 @@ namespace Tangosol.Linq
         }
 
         [Test]
+        public void TestMultipleFromClauses()
+        {
+            INamedCache cache = CacheFactory.GetCache(CacheName);
+            cache.Clear();
+
+            var query = from pn in cache.AsQueriable<PortablePerson>()
+                from x in cache.AsQueriable<PortablePerson>()
+                select pn;
+
+            Assert.Throws(typeof(NotSupportedException), delegate { query.ToList(); });
+            CacheFactory.Shutdown();
+        }
+
+        [Test]
         public void TestEmptyCacheAggregators()
         {
             INamedCache cache = CacheFactory.GetCache(CacheName);
@@ -84,7 +98,7 @@ namespace Tangosol.Linq
             long min = query.DefaultIfEmpty().Min();
             Assert.AreEqual(0, min);
 
-             min = query.DefaultIfEmpty(-9).Min();
+            min = query.DefaultIfEmpty(-9).Min();
             Assert.AreEqual(-9, min);
 
             long max = query.DefaultIfEmpty().Max();

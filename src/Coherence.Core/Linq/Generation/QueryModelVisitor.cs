@@ -32,6 +32,12 @@ namespace Tangosol.Linq.Generation
             query.AddFilter(whereFilter);
         }
 
+        public override void VisitAdditionalFromClause(AdditionalFromClause fromClause, QueryModel queryModel,
+            int index)
+        {
+            throw new NotSupportedException("Additional 'from' clauses are not supported.");
+        }
+
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
             if (typeof(SumResultOperator).IsAssignableFrom(resultOperator.GetType()))
