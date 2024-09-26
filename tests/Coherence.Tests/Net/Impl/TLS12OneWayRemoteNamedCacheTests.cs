@@ -10,16 +10,32 @@ using System.IO;
 using NUnit.Framework;
 using Tangosol.Net.Cache;
 using Tangosol.Net.Messaging.Impl.NamedCache;
+using Tangosol.Run.Xml;
 using Tangosol.Util;
 
 namespace Tangosol.Net.Impl
 {
     [TestFixture]
+    [Platform(Exclude="Unix,Linux,MacOsX")]
     public class TLS12OneWayRemoteNamedCacheTests : RemoteNamedCacheTests
     {
         protected override String TestCacheName
         {
             get { return "tls12CacheName"; }
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            var ccf    = CacheFactory.ConfigurableCacheFactory;
+            var config = XmlHelper.LoadXml("assembly://Coherence.Tests/Tangosol.Resources/s4hc-cache-config-ssl.xml");
+            ccf.Config = config;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            CacheFactory.Shutdown();
         }
 
         [Test]

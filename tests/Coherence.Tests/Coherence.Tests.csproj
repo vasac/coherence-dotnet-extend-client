@@ -40,7 +40,7 @@
     <Copy SourceFiles="appsettings.json" DestinationFiles="$(OutDir)\ReSharperTestRunner64.dll.config" />
   </Target>
   
-  <Target Name="InstallCerts" AfterTargets="AfterBuild">
+  <Target Name="InstallCerts" AfterTargets="AfterBuild" Condition="$(RuntimeIdentifier.StartsWith('win'))">
     <Exec ContinueOnError="true" Command="certutil -delstore -v My MyClient"/>
     <Exec ContinueOnError="true" Command="certutil -delstore -v My MyServerName"/>
     <Exec ContinueOnError="true" Command="certutil -delstore -v My &quot;Test And Dev Root Authority&quot;"/>

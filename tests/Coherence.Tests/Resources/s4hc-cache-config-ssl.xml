@@ -47,19 +47,15 @@
       <scheme-name>extend-direct-oneway-ssl</scheme-name>
     </cache-mapping>
 
-    <!--
-        <cache-mapping>
-          <cache-name>dist-extend-twoway-ssl</cache-name>
-          <scheme-name>extend-direct-twoway-ssl</scheme-name>
-        </cache-mapping>
-    -->
+    <cache-mapping>
+      <cache-name>dist-extend-twoway-ssl</cache-name>
+      <scheme-name>extend-direct-twoway-ssl</scheme-name>
+    </cache-mapping>
 
-    <!--
-        <cache-mapping>
-          <cache-name>dist-extend-tls12</cache-name>
-          <scheme-name>extend-direct-tls12</scheme-name>
-        </cache-mapping>
-    -->
+    <cache-mapping>
+      <cache-name>dist-extend-tls12</cache-name>
+      <scheme-name>extend-direct-tls12</scheme-name>
+    </cache-mapping>
 
     <cache-mapping>
       <cache-name>v-*</cache-name>
@@ -290,88 +286,84 @@
       </initiator-config>
     </remote-cache-scheme>
 
-    <!--
-        <remote-cache-scheme>
-          <scheme-name>extend-direct-tls12</scheme-name>
-          <service-name>ExtendTcpCacheServiceTLS12</service-name>
-          <proxy-service-name>ExtendTcpProxyServiceTLS12</proxy-service-name>
-          <initiator-config>
-            <tcp-initiator>
-              <stream-provider>
-                <ssl>
-                  <protocol>Tls12</protocol>
-                  <remote-certificate-validator>
-                    <delegate>
-                      <type>static</type>
-                      <class-name>Tangosol.Net.SslStreamProvider, Coherence</class-name>
-                      <method-name>IgnoreCommonNameCertificateValidation</method-name>
-                    </delegate>
-                  </remote-certificate-validator>
-                </ssl>
-              </stream-provider>
-              <remote-addresses>
-                <socket-address>
-                  <address>127.0.0.1</address>
-                  <port>9900</port>
-                </socket-address>
-                 <socket-address>
-                  <address>127.0.0.1</address>
-                  <port>9901</port>
-                </socket-address>
-              </remote-addresses>
-            </tcp-initiator>
-            <outgoing-message-handler>
-              <heartbeat-interval>1s</heartbeat-interval>
-              <heartbeat-timeout>10s</heartbeat-timeout>
-            </outgoing-message-handler>
-          </initiator-config>
-        </remote-cache-scheme>
-    -->
+    <remote-cache-scheme>
+      <scheme-name>extend-direct-tls12</scheme-name>
+      <service-name>ExtendTcpCacheServiceTLS12</service-name>
+      <proxy-service-name>ExtendTcpProxyServiceTLS12</proxy-service-name>
+      <initiator-config>
+        <tcp-initiator>
+          <stream-provider>
+            <ssl>
+              <protocol>Tls12</protocol>
+              <remote-certificate-validator>
+                <delegate>
+                  <type>static</type>
+                  <class-name>Tangosol.Net.SslStreamProvider, Coherence</class-name>
+                  <method-name>IgnoreCommonNameCertificateValidation</method-name>
+                </delegate>
+              </remote-certificate-validator>
+            </ssl>
+          </stream-provider>
+          <remote-addresses>
+            <socket-address>
+              <address>127.0.0.1</address>
+              <port>9900</port>
+            </socket-address>
+            <socket-address>
+              <address>127.0.0.1</address>
+              <port>9901</port>
+            </socket-address>
+          </remote-addresses>
+        </tcp-initiator>
+        <outgoing-message-handler>
+          <heartbeat-interval>1s</heartbeat-interval>
+          <heartbeat-timeout>10s</heartbeat-timeout>
+        </outgoing-message-handler>
+      </initiator-config>
+    </remote-cache-scheme>
 
-    <!--
-        <remote-cache-scheme>
-          <scheme-name>extend-direct-twoway-ssl</scheme-name>
-          <service-name>ExtendTcpCacheServiceTwoWaySSL</service-name>
-          <proxy-service-name>ExtendTcpProxyServiceTwoWaySSL</proxy-service-name>
-          <initiator-config>
-            <tcp-initiator>
-              <stream-provider>
-                <ssl>
-                  <protocol>Tls12</protocol>
-                  <local-certificates>
-                    <certificate>
-                       <url>./Config/testcert.pfx</url>
-                       <password>password</password>
-                       <flags>MachineKeySet</flags>
-                    </certificate>
-                  </local-certificates>
-                  <remote-certificate-validator>
-                    <delegate>
-                      <type>static</type>
-                      <class-name>Tangosol.Net.SslStreamProvider, Coherence</class-name>
-                      <method-name>IgnoreCommonNameCertificateValidation</method-name>
-                    </delegate>
-                  </remote-certificate-validator>
-                </ssl>
-              </stream-provider>
-              <remote-addresses>
-                <socket-address>
-                  <address>127.0.0.1</address>
-                  <port>9800</port>
-                </socket-address>
-                 <socket-address>
-                  <address>127.0.0.1</address>
-                  <port>9801</port>
-                </socket-address>
-              </remote-addresses>
-            </tcp-initiator>
-            <outgoing-message-handler>
-              <heartbeat-interval>1s</heartbeat-interval>
-              <heartbeat-timeout>10s</heartbeat-timeout>
-            </outgoing-message-handler>
-          </initiator-config>
-        </remote-cache-scheme>
-    -->
+    <remote-cache-scheme>
+      <scheme-name>extend-direct-twoway-ssl</scheme-name>
+      <service-name>ExtendTcpCacheServiceTwoWaySSL</service-name>
+      <proxy-service-name>ExtendTcpProxyServiceTwoWaySSL</proxy-service-name>
+      <initiator-config>
+        <tcp-initiator>
+          <stream-provider>
+            <ssl>
+              <protocol>Tls12</protocol>
+              <local-certificates>
+                <certificate>
+                  <url>./Config/testcert.pfx</url>
+                  <password>password</password>
+                  <flags>MachineKeySet</flags>
+                </certificate>
+              </local-certificates>
+              <remote-certificate-validator>
+                <delegate>
+                  <type>static</type>
+                  <class-name>Tangosol.Net.SslStreamProvider, Coherence</class-name>
+                  <method-name>IgnoreCommonNameCertificateValidation</method-name>
+                </delegate>
+              </remote-certificate-validator>
+            </ssl>
+          </stream-provider>
+          <remote-addresses>
+            <socket-address>
+              <address>127.0.0.1</address>
+              <port>9800</port>
+            </socket-address>
+            <socket-address>
+              <address>127.0.0.1</address>
+              <port>9801</port>
+            </socket-address>
+          </remote-addresses>
+        </tcp-initiator>
+        <outgoing-message-handler>
+          <heartbeat-interval>1s</heartbeat-interval>
+          <heartbeat-timeout>10s</heartbeat-timeout>
+        </outgoing-message-handler>
+      </initiator-config>
+    </remote-cache-scheme>
 
     <remote-invocation-scheme>
       <scheme-name>extend-proxy-stop</scheme-name>

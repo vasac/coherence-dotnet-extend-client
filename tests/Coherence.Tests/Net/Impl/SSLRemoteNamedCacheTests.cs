@@ -13,11 +13,13 @@ using System.Threading;
 using NUnit.Framework;
 using Tangosol.Net.Cache;
 using Tangosol.Net.Messaging.Impl.NamedCache;
+using Tangosol.Run.Xml;
 using Tangosol.Util;
 
 namespace Tangosol.Net.Impl {
 
     [TestFixture]
+    [Platform(Exclude="Unix,Linux,MacOsX")]
     public class SSLRemoteNamedCacheTests
     {
 
@@ -33,6 +35,20 @@ namespace Tangosol.Net.Impl {
         {
             get { return appSettings.Get("sslTwoWayCacheName"); }
             set { m_cacheName = value; }
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            var ccf    = CacheFactory.ConfigurableCacheFactory;
+            var config = XmlHelper.LoadXml("assembly://Coherence.Tests/Tangosol.Resources/s4hc-cache-config-ssl.xml");
+            ccf.Config = config;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            CacheFactory.Shutdown();
         }
 
         [Test]
