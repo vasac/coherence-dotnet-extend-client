@@ -104,3 +104,62 @@ jobs:
       with:
         name: build-output
         path: build\**\*.log
+
+  test-windows:
+    name: Test on Windows against Coherence ${{ matrix.coherence_version }}
+    needs: build
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        coherence_version: [14.1.1-0-17, 22.06.8, 24.03]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Set up Java 17
+    - name: Set up Java 17
+      uses: actions/setup-java@v1
+      with:
+        java-version: '17'
+
+    # Install SSL certificates
+#    - name: Install SSL certificates
+#      run: |
+#        copy tests/Coherence.Tests/Config/testcert.pem /usr/local/share/ca-certificates/testcert.crt
+#        copy tests/Coherence.Tests/Net/Ssl/CA.cer /usr/local/share/ca-certificates/CA.crt
+#        copy tests/Coherence.Tests/Net/Ssl/Server.cer /usr/local/share/ca-certificates/Server.crt
+#        copy update-ca-certificates
+        
+    # Build
+    - name: Build
+      run: |
+        dotnet restore
+        dotnet build --configuration Release --no-restore
+
+    # Build test server
+    - name: Build test server
+      run: |
+        cd tests/test-server
+        mvn --batch-mode -e clean install -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer
+        cd ../..
+
+    # Start test server
+    - name: Start test server
+      run: |
+        cd tests/test-server
+        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer &
+        sleep 30
+        cd ../..
+
+    # Run Tests
+    - name: Run Tests
+      run: dotnet test --filter FullyQualifiedName\!~Tangosol.Web --configuration Release --no-restore
+
+    # Capture server log for diagnosing failures
+    - name: Capture test logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: build\**\*.log
