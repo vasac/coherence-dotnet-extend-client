@@ -142,14 +142,14 @@ jobs:
     - name: Build test server
       run: |
         cd tests/test-server
-        mvn --batch-mode -e clean install -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer
+        mvn --batch-mode -e clean install -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" "-Dcoherence.groupid=com.oracle.coherence.ce" -Dmain="com.tangosol.net.DefaultCacheServer"
         cd ../..
 
     # Start test server
     - name: Start test server
       run: |
         cd tests/test-server
-        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer &
+        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" "-Dcoherence.groupid=com.oracle.coherence.ce" -Dmain="com.tangosol.net.DefaultCacheServer" &
         sleep 30
         cd ../..
 
