@@ -90,7 +90,8 @@ jobs:
     - name: Start test server
       run: |
         cd tests/test-server
-        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" "-Dcoherence.groupid=com.oracle.coherence.ce" -Dmain="com.tangosol.net.Coherence" & > server.log
+        #        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" "-Dcoherence.groupid=com.oracle.coherence.ce" -Dmain="com.tangosol.net.Coherence" & > server.log
+        Start-Process 'mvn' -ArgumentList '  --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision="${{ matrix.coherence_version }}" "-Dcoherence.groupid=com.oracle.coherence.ce" -Dmain="com.tangosol.net.Coherence"' -NoNewWindow -RedirectStandardOutput maven_build.log -RedirectStandardError maven_error.log
         sleep 30
         ping 127.0.0.1 -n 30 > nul
         cd ../..
