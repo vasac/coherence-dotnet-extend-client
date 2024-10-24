@@ -43,7 +43,11 @@ interface but rather than storing the associated data in the local process it is
 (or sharded) across a number of designated remote nodes. This partitioning enables
 applications to not only distribute (and therefore scale) their storage across multiple
 processes, machines, racks, and data centers but also to perform grid-based processing
-to truly harness the CPU resources of the machines. 
+to truly harness the CPU resources of the machines.
+
+Using .NET 6, the output from the build is located in the `src/<project>/bin/<Debug|Release>/net6.0` subdirectory.
+Using .NET 8, the output from the build is located in the `src/<project>/bin/<Debug|Release>/net8.0` subdirectory.
+
 
 The Coherence interface `INamedCache` (an extension of `IDictionary`) provides methods
 to query, aggregate (map/reduce style) and compute (send functions to storage nodes
