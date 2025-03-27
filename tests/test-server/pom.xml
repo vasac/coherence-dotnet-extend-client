@@ -51,7 +51,9 @@
           <arguments>
             <argument>-classpath</argument>
             <classpath/>
-            <argument>-Dcoherence.log=../../build/DefaultCacheServer.log</argument>
+            <argument>-Dcoherence.log=DefaultCacheServer.log</argument>
+            <argument>-Dcoherence.log.level=6</argument>
+            <argument>-Dtangosol.coherence.messaging.debug=true</argument>
             <argument>${main}</argument>
           </arguments>
         </configuration>

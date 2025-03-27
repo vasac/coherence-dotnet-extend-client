@@ -5,7 +5,7 @@
  * https://oss.oracle.com/licenses/upl.
  */
 using System;
-
+using System.Threading;
 using NUnit.Framework;
 using Tangosol.Net;
 
@@ -33,6 +33,7 @@ namespace Tangosol.Data
             // proxy service
             var service1 = (ICacheService)CacheFactory
                     .GetService("ExtendTcpCacheService");
+            Thread.Sleep(4000);
             var service2 = (ICacheService)CacheFactory
                     .GetService("ExtendTcpCacheService2");
             INamedCache cache1 = service1.EnsureCache("local-test");

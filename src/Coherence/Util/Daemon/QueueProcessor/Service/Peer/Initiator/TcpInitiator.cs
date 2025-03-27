@@ -391,10 +391,12 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
             IPEndPoint  addrNext     = null;
             Int32       subportNext  = -1;
             Exception   cause        = null;
+            CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection OPEN A NEW CONNECTION", CacheFactory.LogLevel.Warn);
             for ( ; ; )
             {
                 var connection = (TcpConnection) InstantiateConnection();
-
+                
+                CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection connection " + connection, CacheFactory.LogLevel.Warn);
                 IPEndPoint addr;
                 Int32      subport;
                 if (enmrRedirect == null || addrNext == null)
@@ -405,6 +407,7 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
                     // reset redirection information
                     enmrRedirect = null;
                     enmrSubport  = null;
+                    CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection REDIRECT=NULL addr: " + addr + "    subport: " + subport, CacheFactory.LogLevel.Warn);
                 }
                 else
                 {
@@ -418,6 +421,7 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
 
                     // update redirection information
                     connection.IsRedirect = true;
+                    CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection REDIRECT!=NULL addr: " + addr + "    subport: " + subport, CacheFactory.LogLevel.Warn);
                 }
 
                 if (addr == null)
@@ -429,6 +433,7 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
                 if (RemoteAddressProvider is ConfigurableAddressProvider)
                 {
                     StreamProvider.RemoteAddress = ((ConfigurableAddressProvider) RemoteAddressProvider).RemoteHostAddress;
+                    CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection RemoteAddressProvider is ConfigurableAddressProvider StreamProvider.RemoteAddress: " + StreamProvider.RemoteAddress, CacheFactory.LogLevel.Warn);
                 }
 
                 if (addresses.Length > 1)
@@ -518,6 +523,7 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
                 }
                 catch (Exception e)
                 {
+                    CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection exception 1: " + e, CacheFactory.LogLevel.Warn);
                     if (enmrRedirect == null && connection.IsRedirect)
                     {
                         IList list = connection.RedirectList;
@@ -572,6 +578,7 @@ namespace Tangosol.Util.Daemon.QueueProcessor.Service.Peer.Initiator
                 }
 
                 provider.Accept();
+                CacheFactory.Log("AAAAAAAAAAAAAA TcpInitiator.OpenConnection RETURN connection: " + connection, CacheFactory.LogLevel.Warn);
                 return connection;
             }
             addresses.Append(']');

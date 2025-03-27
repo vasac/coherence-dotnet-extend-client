@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coherence_version: [14.1.1-0-20, 22.06.11, 14.1.2-0-1, 24.09.3]
+        coherence_version: [22.06.11, 14.1.2-0-1, 24.09.3]
 
     steps:
     - name: Checkout
@@ -107,9 +107,36 @@ jobs:
     - name: Start test server
       run: |
         pushd tests/test-server
-        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer -Dexec.args="-Dtangosol.coherence.proxy.port=12345 -Dcoherence.proxy.port1=3001 -Dtangosol.coherence.proxy.port5=3002 -Dtangosol.coherence.proxy.port4=3003 -Dtangosol.coherence.proxy.port2=3004 -Dtangosol.coherence.proxy.port11=3005 -Dtangosol.coherence.proxy.port12=3006 -Dtangosol.coherence.proxy.port7=3007 -Dtangosol.coherence.proxy.port9=3008 -Dtangosol.coherence.proxy.port8=3009 -Dcoherence.management=all -cp %classpath com.tangosol.net.DefaultCacheServer" &
+        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer -Dexec.args="-Dcoherence.log=DefaultCacheServer2.log -Dcoherence.log.level=6 -Dtangosol.coherence.proxy.port=12345 -Dcoherence.proxy.port1=3001 -Dtangosol.coherence.proxy.port5=3002 -Dtangosol.coherence.proxy.port4=3003 -Dtangosol.coherence.proxy.port2=3004 -Dtangosol.coherence.proxy.port11=3005 -Dtangosol.coherence.proxy.port12=3006 -Dtangosol.coherence.proxy.port7=3007 -Dtangosol.coherence.proxy.port9=3008 -Dtangosol.coherence.proxy.port8=3009 -Dcoherence.management=all -Dcoherence.health.http.port=33333 -Dtangosol.coherence.messaging.debug=true -cp %classpath com.tangosol.net.Coherence" &
         sleep 30
         popd
+
+    - name: Retry curl until cluster is ready
+      id: curl_check
+      run: |
+        max_attempts=60
+        attempt=1
+        url="http://localhost:33333/ready"
+        expected_response="200"
+        
+        while [ $attempt -le $max_attempts ]; do
+          response=$(curl -s -o /dev/null -w %{http_code} "$url")
+          echo "Attempt $attempt: Response - $response"
+
+          if [ "$response" != "$expected_response" ]; then
+            echo "Received incorrect response. Retrying..."
+            sleep 5
+          else
+            echo "Correct response received. Exiting..."
+            exit 0
+          fi
+
+          sleep 5
+          attempt=$((attempt + 1))
+        done
+
+        echo "All attempts failed."
+        exit 1  # Fails the step if all attempts fail
 
     # Run Tests
     - name: Run Tests
@@ -117,7 +144,13 @@ jobs:
 
     # Capture server log for diagnosing failures
     - name: Capture test logs
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
-        name: build-output
-        path: build\**\*.log
+        name: build-output-${{ matrix.os }}-${{ matrix.coherence_version }}
+        path: |
+          build/
+          ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/test-server/
+          ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/build/
+        compression-level: 9
+

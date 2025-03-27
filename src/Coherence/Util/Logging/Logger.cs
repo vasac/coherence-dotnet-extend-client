@@ -551,7 +551,8 @@ namespace Tangosol.Util.Logging
             messageArray[1] = GetInteger(level);
             messageArray[2] = Thread.CurrentThread;
             messageArray[3] = exception;
-            messageArray[4] = message;
+            messageArray[4] = "[" + Environment.Version + "]    " + message;
+
 
             if (countParam > 0)
             {
