@@ -86,15 +86,14 @@ jobs:
     - name: Build Coherence
       run: |
         echo "Building Coherence"
-        pushd tests/coherence
-        export DEV_ROOT=$(pwd)
-        export SETTINGS_XML=${DEV_ROOT}/.github/maven/settings.xml
-        pushd prj
-        mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests
+        pushd tests/coherence/prj
+        source ../bin/cfglocal.sh
+        # export DEV_ROOT=$(pwd)
+        # export SETTINGS_XML=${DEV_ROOT}/.github/maven/settings.xml
+        # mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests
         # mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -P-modules -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
         # mvn --file prj/pom.xml --batch-mode -e -s ${SETTINGS_XML} -Pmodules,-coherence -nsu -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true -Dcoherence.compatability.settings=${SETTINGS_XML} clean install
-        # make all
-        popd
+        make all
         popd
 
     # Build
