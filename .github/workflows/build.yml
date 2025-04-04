@@ -86,6 +86,7 @@ jobs:
     - name: Build Coherence
       run: |
         pushd tests/coherence/prj
+        source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/cfglocal.sh
         make all
         popd
 
