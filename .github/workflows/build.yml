@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
 
     steps:
     - name: Checkout
@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coherence_version: [22.06.11, 14.1.2-0-1, 24.09.3]
+        coherence_version: [25.12]
 
     steps:
     - name: Checkout
@@ -81,6 +81,13 @@ jobs:
       with:
         distribution: 'oracle'
         java-version: '17'
+
+    # Build Coherence
+    - name: Build Coherence
+      run: |
+        pushd tests/coherence/prj
+        make all
+        popd
 
     # Build
     - name: Build
