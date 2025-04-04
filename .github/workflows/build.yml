@@ -81,7 +81,13 @@ jobs:
       with:
         distribution: 'oracle'
         java-version: '21'
-        cache: "maven"
+
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2-
 
     # Build Coherence
     - name: Build Coherence
@@ -103,7 +109,9 @@ jobs:
         # mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests
         # mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -P-modules -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
         # mvn --file prj/pom.xml --batch-mode -e -s ${SETTINGS_XML} -Pmodules,-coherence -nsu -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true -Dcoherence.compatability.settings=${SETTINGS_XML} clean install
+        echo "MAKE COHERENCE"
         make coherence
+        echo "MAKE MODULES"
         make modules
         popd
 
