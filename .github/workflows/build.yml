@@ -75,12 +75,12 @@ jobs:
           6.x
           8.x
 
-    # Set up Java 17
+    # Set up Java 21
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: 'oracle'
-        java-version: '17'
+        java-version: '21'
 
     # Build Coherence
     - name: Build Coherence
