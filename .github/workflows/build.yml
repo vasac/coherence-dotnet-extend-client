@@ -86,6 +86,14 @@ jobs:
     - name: Build Coherence
       run: |
         echo "Building Coherence"
+        pushd tests/coherence
+        ls -al
+        popd
+
+        pushd tests/coherence/bin
+        ls -al
+        popd
+
         pushd tests/coherence/prj
         # source ../bin/cfglocal.sh
         source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/bin/cfglocal.sh
