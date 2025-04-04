@@ -77,10 +77,11 @@ jobs:
 
     # Set up Java 21
     - name: Set up JDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'oracle'
         java-version: '21'
+        cache: "maven"
 
     # Build Coherence
     - name: Build Coherence
@@ -90,13 +91,13 @@ jobs:
         ls -al
         popd
 
-        pushd tests/coherence/bin
+        pushd tests/coherence/envconfig
         ls -al
         popd
 
         pushd tests/coherence/prj
         # source ../bin/cfglocal.sh
-        source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/bin/cfglocal.sh
+        source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/envconfig/cfglocal.sh
         # export DEV_ROOT=$(pwd)
         # export SETTINGS_XML=${DEV_ROOT}/.github/maven/settings.xml
         # mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests
