@@ -89,8 +89,9 @@ jobs:
         pushd tests/coherence
         export DEV_ROOT=$(pwd)
         export SETTINGS_XML=${DEV_ROOT}/.github/maven/settings.xml
-        mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -P-modules -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
-        mvn --file prj/pom.xml --batch-mode -e -s ${SETTINGS_XML} -Pmodules,-coherence -nsu -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true -Dcoherence.compatability.settings=${SETTINGS_XML} clean install
+        mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
+        # mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -P-modules -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
+        # mvn --file prj/pom.xml --batch-mode -e -s ${SETTINGS_XML} -Pmodules,-coherence -nsu -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true -Dcoherence.compatability.settings=${SETTINGS_XML} clean install
         popd
 
     # Build
