@@ -94,8 +94,7 @@ jobs:
       run: |
         echo "Building Coherence"
         pushd coherence/prj
-        source ../envconfig/cfglocal.sh
-        make all
+        source ../envconfig/cfglocal.sh && make all
 
         # mvn clean install -DskipTests
         # source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/envconfig/cfglocal.sh
