@@ -1,0 +1,72 @@
+# Copyright 2025, Oracle Corporation and/or its affiliates.
+#
+# Licensed under the Universal Permissive License v 1.0 as shown at
+# http://oss.oracle.com/licenses/upl.
+
+# This workflow will build a Java project with Maven and deploy snapshot
+# artifacts to Maven Central
+#
+# This job is triggered by a completed run of the "CI Build" action.
+# The "build" job only runs if the "CI Build" action completed successfully.
+# The deployed artifacts will be built from the same commit that the "CI Build" action used.
+#
+name: Deploy to Maven Central
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        default: ubuntu-latest
+        required: true
+        type: string
+
+env:
+  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+  GIT_USER: ${{ secrets.BOT_USERNAME }}
+  GIT_EMAIL: ${{ secrets.BOT_EMAIL }}
+  MAVEN_OPTS: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false
+
+jobs:
+  build:
+    if: github.run_attempt == 1
+    runs-on: ${{ inputs.runner }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: oracle-actions/setup-java@v1
+      with:
+        website: oracle.com
+        release: 21
+
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Build with Maven
+      env:
+        MAVEN_USER: ${{ secrets.MavenUser }}
+        MAVEN_PASSWORD: ${{ secrets.MavenPassword }}
+      run: |
+        git config --local user.name "${GIT_USER}"
+        git config --local user.email "${GIT_EMAIL}"
+        sh tools/bin/github-deploy-snapshots.sh
+
+    - name: Build Docs
+      env:
+        MAVEN_USER: ${{ secrets.MavenUser }}
+        MAVEN_PASSWORD: ${{ secrets.MavenPassword }}
+      run: |
+        cd prj
+        make docs
+
+    - name: Upload Docs
+      uses: actions/upload-artifact@v4
+      with:
+        name: docs.zip
+        path: prj/docs/target/docs.zip
+        if-no-files-found: ignore

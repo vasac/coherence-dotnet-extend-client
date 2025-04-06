@@ -1816,7 +1816,6 @@ public class ProxyService
                     || connectionImpl.isRedirect()
                     || !connectionImpl.isRedirectSupported())
                 {
-                _trace("AAAAAAAAAA ProxyService.onRedirectRequest list=null", 2);
                 list = null;
                 }
             else
@@ -1824,7 +1823,6 @@ public class ProxyService
                 Subject subject = connection.getChannel(0).getSubject();
                 if (subject == null)
                     {
-                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest list=getMemberList", 2);
                     list = balancer.getMemberList(connectionImpl.getMember());
                     }
                 else
@@ -1832,19 +1830,10 @@ public class ProxyService
                     ProxyService.LoadBalancerActionGetList action = new ProxyService.LoadBalancerActionGetList();
                     action.setBalancer(balancer);
                     action.setConnection(connectionImpl);
-                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest list=Subject.doAs...", 2);
                     list = (List) Subject.doAs(subject, action);
                     }
                 }
-
-            if (list == null)
-                {
-                _trace("AAAAAAAAAA ProxyService.onRedirectRequest list=null", 2);
-                }
-            else
-                {
-                _trace("AAAAAAAAAA ProxyService.onRedirectRequest list.size()" + list.size(), 2);
-                }
+        
             // redirect, if possible
             if (list != null && !list.isEmpty())
                 {
@@ -1852,11 +1841,9 @@ public class ProxyService
                 if (Base.equals(memberThis, list.get(0)))
                     {
                     // if the list starts with the local member, we are done
-                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest the list starts with the local member, we are done", 2);
                     }
                 else
                     {
-                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest update the connection with redirection information", 2);
                     // update the connection with redirection information
                     boolean          fConnectionPendingUpdated = false;
                     List             listAddr                  = new ArrayList(list.size());
@@ -1868,11 +1855,9 @@ public class ProxyService
                         if (Base.equals(memberThis, member))
                             {
                             // stop iterating once this member is reached
-                            _trace("AAAAAAAAAA ProxyService.onRedirectRequest stop iterating once this member is reached", 2);
                             break;
                             }
-
-                        _trace("AAAAAAAAAA ProxyService.onRedirectRequest next member: " + member, 2);
+        
                         Object[] result = getRoutableAddress(member, socket);
         
                         if (result != null)
@@ -1881,50 +1866,23 @@ public class ProxyService
                             if (!fConnectionPendingUpdated)
                                 {
                                 // assume that the client will reconnect to the first routable member
-                                _trace("AAAAAAAAAA ProxyService.onRedirectRequest assume that the client will reconnect to the first routable member " + member, 2);
                                 ProxyService.ServiceLoad load = (ProxyService.ServiceLoad) getServiceLoadMap().get(member);
                                 if (load != null)
                                     {
-                                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest load != null " + load, 2);
                                     load.updateConnectionPendingCount(1);
                                     updateLoadBalancer(member, load, connectionImpl);
                                     }
-                                else
-                                    {
-                                    _trace("AAAAAAAAAA ProxyService.onRedirectRequest load = null ", 2);
-                                    }
                                 fConnectionPendingUpdated = true;
                                 }
-                            else
-                                {
-                                _trace("AAAAAAAAAA ProxyService.onRedirectRequest fConnectionPendingUpdated was true", 2);
-                                }
-                            }
-                        else
-                            {
-                            _trace("AAAAAAAAAA ProxyService.onRedirectRequest result = null", 2);
                             }
                         }
                     if (!listAddr.isEmpty())
                         {
-                        _trace("AAAAAAAAAA ProxyService.onRedirectRequest listAddr is NOT empty", 2);
-                        for(Object o : listAddr)
-                            {
-                            _trace("AAAAAAAAAA ProxyService.onRedirectRequest addr: " + o, 2);
-                            }
                         connectionImpl.setRedirect(true);
                         connectionImpl.setRedirectList(listAddr);
                         fRedirect = true;
                         }
-                    else
-                        {
-                        _trace("AAAAAAAAAA ProxyService.onRedirectRequest listAddr is empty", 2);
-                        }
                     }
-                }
-            else
-                {
-                _trace("AAAAAAAAAA ProxyService.onRedirectRequest redirect not possible", 2);
                 }
             }
         

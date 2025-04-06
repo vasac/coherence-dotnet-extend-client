@@ -134,8 +134,10 @@ function setup
   unset _VERSION_REQUIRED
   export DEV_ROOT
   echo DEV_ROOT = $DEV_ROOT
+  echo "DEV_ROOT=$DEV_ROOT" >> $GITHUB_ENV
   export JAVA_HOME
   echo JAVA_HOME = $JAVA_HOME
+  echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
   $JAVA_HOME/bin/java -version
 
   #
@@ -176,6 +178,7 @@ function setup
   CLASSPATH=""
   export CLASSPATH
   echo CLASSPATH = $CLASSPATH
+  echo "CLASSPATH=$CLASSPATH" >> $GITHUB_ENV
 
   export PATH
   echo PATH = $PATH

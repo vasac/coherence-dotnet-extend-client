@@ -10,8 +10,6 @@ import com.tangosol.net.Member;
 import com.tangosol.net.ProxyService;
 import com.tangosol.net.SimpleServiceLoadBalancer;
 
-import com.tangosol.util.Base;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -70,19 +68,15 @@ public class DefaultProxyServiceLoadBalancer
     @Override
     public List<Member> getMemberList(Member client)
         {
-        log("AAAAAAAAAA DefaultProxyServiceLoadBalancer.getMemberList client: " + client);
-         
         ProxyServiceLoad loadLocal = m_loadLocal;
         if (loadLocal == null)
             {
-            log("AAAAAAAAAA DefaultProxyServiceLoadBalancer.getMemberList loadLocal = null /END");
             return null;
             }
 
         List<Member> listReturn = super.getMemberList(client);
         if (listReturn == null || listReturn.isEmpty())
             {
-            log("AAAAAAAAAA DefaultProxyServiceLoadBalancer.getMemberList listReturn = null /END");
             return listReturn;
             }
 
@@ -95,15 +89,9 @@ public class DefaultProxyServiceLoadBalancer
                 ? (loadLocal.equals(m_mapLoad.get(member0)))
                 : ((comparator.compare(m_mapLoad.get(member0), loadLocal) == 0))))
             {
-            log("AAAAAAAAAA DefaultProxyServiceLoadBalancer.getMemberList if the local load is the same as the first element, move the local member to the beginning ");
             Member memberThis = getLocalMember();
             listReturn.remove(memberThis);
             listReturn.add(0, memberThis);
-            }
-
-        for(Member member: listReturn)
-            {
-            log("AAAAAAAAAA DefaultProxyServiceLoadBalancer.getMemberList returning " + member);
             }
 
         return listReturn;
