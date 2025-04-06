@@ -6,7 +6,7 @@
 
   <groupId>com.oracle.coherence.dotnet</groupId>
   <artifactId>test-server</artifactId>
-  <version>25.09</version>
+  <version>${revision}</version>
 
   <name>Coherence.NET Test Server</name>
   <description>
@@ -23,7 +23,7 @@
     <maven.compiler.version>3.8.1</maven.compiler.version>
 
     <coherence.groupid>com.oracle.coherence.ce</coherence.groupid>
-    <coherence.version>25.09</coherence.version>
+    <coherence.version>25.09-SNAPSHOT</coherence.version>
   </properties>
 
   <dependencies>
