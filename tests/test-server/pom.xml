@@ -22,8 +22,8 @@
     <maven.compiler.target>${maven.compiler.release}</maven.compiler.target>
     <maven.compiler.version>3.8.1</maven.compiler.version>
 
-    <coherence.groupid>com.oracle.coherence</coherence.groupid>
-    <coherence.version>${project.version}</coherence.version>
+    <coherence.groupid>com.oracle.coherence.ce</coherence.groupid>
+    <coherence.version>25.09</coherence.version>
   </properties>
 
   <dependencies>
