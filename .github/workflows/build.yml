@@ -96,6 +96,7 @@ jobs:
         echo "GITHUB_ENV: $GITHUB_ENV"
         pushd coherence/prj
         ../cfgbin/cfglocal.sh
+        env
         make all
 
         # mvn clean install -DskipTests
