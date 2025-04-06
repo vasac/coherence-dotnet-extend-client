@@ -6,7 +6,7 @@
 
   <groupId>com.oracle.coherence.dotnet</groupId>
   <artifactId>test-server</artifactId>
-  <version>${revision}</version>
+  <version>25.09</version>
 
   <name>Coherence.NET Test Server</name>
   <description>
