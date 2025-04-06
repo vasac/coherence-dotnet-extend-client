@@ -131,6 +131,8 @@ function setup
     unset _VERSION
   fi
 
+  echo "CFGCOMMON"
+
   unset _VERSION_REQUIRED
   export DEV_ROOT
   echo DEV_ROOT = $DEV_ROOT
@@ -153,6 +155,7 @@ function setup
     MAVEN_HOME=$DEV_ROOT/tools/maven
     PATH=$MAVEN_HOME/bin:$PATH
     export MAVEN_HOME
+    echo "MAVEN_HOME=$MAVEN_HOME" >> $GITHUB_ENV
     echo MAVEN_HOME = $MAVEN_HOME
   fi
 
@@ -181,6 +184,7 @@ function setup
   echo "CLASSPATH=$CLASSPATH" >> $GITHUB_ENV
 
   export PATH
+  echo "$PATH" >> $GITHUB_PATH
   echo PATH = $PATH
   echo Build environment set.
   }

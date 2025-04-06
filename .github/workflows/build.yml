@@ -93,8 +93,10 @@ jobs:
     - name: Build Coherence
       run: |
         echo "Building Coherence"
+        echo "GITHUB_ENV: $GITHUB_ENV"
         pushd coherence/prj
-        source ../cfgbin/cfglocal.sh && make all
+        ../cfgbin/cfglocal.sh
+        make all
 
         # mvn clean install -DskipTests
         # source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/envconfig/cfglocal.sh

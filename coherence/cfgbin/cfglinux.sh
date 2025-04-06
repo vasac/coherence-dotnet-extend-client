@@ -23,6 +23,7 @@
 # Note: this command is evaluated when required
 _JAVA_HOME_CMD="get_java_home"
 
+echo "CFGLINUX.SH"
 function get_java_home
   {
   if [ -d /usr/java/jdk$_VERSION_REQUIRED ]; then
