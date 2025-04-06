@@ -81,11 +81,11 @@ test-security: ## Run a functional test with security manager enabled (must spec
 		-Dfailsafe.failIfNoSpecifiedTests=false -Dsurefire.failIfNoSpecifiedTests=false
 
 define mvn_build_coherence
-	mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests $(1) $(ARGS)
+	mvn -X clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests $(1) $(ARGS)
 endef
 
 define mvn_build_modules
-	mvn clean install -T 1.5C -nsu -Pmodules,-coherence -Dgradle.skip.test=true -DskipTests $(1) $(ARGS)
+	mvn -X clean install -T 1.5C -nsu -Pmodules,-coherence -Dgradle.skip.test=true -DskipTests $(1) $(ARGS)
 endef
 
 .PHONY: docs
