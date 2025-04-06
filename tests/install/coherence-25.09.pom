@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle.coherence.ce</groupId>
   <artifactId>coherence</artifactId>
-  <version>25.09-SNAPSHOT</version>
+  <version>25.09</version>
   <name>Coherence</name>
   <description>Oracle Coherence Community Edition</description>
   <url>https://coherence.community/</url>
