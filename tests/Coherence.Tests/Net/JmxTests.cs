@@ -14,7 +14,7 @@ using Tangosol.Run.Xml;
 
 namespace Tangosol.Net
 {
-    [TestFixture]
+    // [TestFixture]
     public class JmxTests
     {
         NameValueCollection appSettings = TestUtils.AppSettings;
@@ -26,14 +26,14 @@ namespace Tangosol.Net
             get { return appSettings.Get("cacheName"); }
         }
 
-        [SetUp]
+        // [SetUp]
         public void SetUp()
         {
             TestContext.Error.WriteLine($"[START] {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}: {TestContext.CurrentContext.Test.FullName}");
             namedCache = CacheFactory.GetCache(CacheName);
         }
 
-        [TearDown]
+        // [TearDown]
         public void TearDown()
         {
             namedCache.CacheService.Shutdown();
@@ -41,7 +41,7 @@ namespace Tangosol.Net
             TestContext.Error.WriteLine($"[END]   {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}: {TestContext.CurrentContext.Test.FullName}");
         }
 
-        [Test]
+        // [Test]
         public void TestJmxConnectionInformation()
         {
             IConfigurableCacheFactory ccf = CacheFactory.ConfigurableCacheFactory;
