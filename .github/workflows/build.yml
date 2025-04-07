@@ -173,8 +173,12 @@ jobs:
         exit 1  # Fails the step if all attempts fail
 
     # Run Tests
+    # Run Tests with .net 6
+      run: dotnet test --framework net6.0 --filter FullyQualifiedName\!~Tangosol.Web --configuration Release --no-restore
+
+    # Run Tests with .net 8
     - name: Run Tests
-      run: dotnet test --filter FullyQualifiedName\!~Tangosol.Web --configuration Release --no-restore
+      run: dotnet test --framework net8.0 --filter FullyQualifiedName\!~Tangosol.Web --configuration Release --no-restore
 
     # Capture server log for diagnosing failures
     - name: Capture test logs
