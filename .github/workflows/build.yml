@@ -131,7 +131,7 @@ jobs:
         # pushd tests/test-server
         pushd tests/run
         # mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=25.12 -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer &
-        java -cp test-server-25.12.jar:jakarta.el-api-5.0.1.jar:coherence-25.12.jar com.tangosol.net.Coherence &
+        java -cp test-server-25.12.jar:jakarta.el-api-5.0.1.jar:coherence-25.12.jar -Dcoherence.log=DefaultCacheServer.log com.tangosol.net.Coherence &
         sleep 10
         popd
         
