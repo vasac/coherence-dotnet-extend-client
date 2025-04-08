@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - name: Checkout
@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coherence_version: [25.12]
+        coherence_version: [14.1.1-0-20, 22.06.11, 14.1.2-0-1, 24.09.3]
 
     steps:
     - name: Checkout
@@ -75,42 +75,12 @@ jobs:
           6.x
           8.x
 
-    # Set up Java 21
+    # Set up Java 17
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v3
       with:
         distribution: 'oracle'
-        java-version: '21'
-
-    - name: Cache Maven packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2-
-
-    # Build Coherence
-    - name: Build Coherence
-      run: |
-        echo "Building Coherence"
-        # echo "GITHUB_ENV: $GITHUB_ENV"
-        # pushd coherence/prj
-        # ../cfgbin/cfglocal.sh
-        # env
-        # make all
-
-        # mvn clean install -DskipTests
-        # source ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/coherence/envconfig/cfglocal.sh
-        # export DEV_ROOT=$(pwd)
-        # export SETTINGS_XML=${DEV_ROOT}/.github/maven/settings.xml
-        # mvn clean install -T 1.5C -U -Dgradle.skip.test=true -DskipTests
-        # mvn --file prj/pom.xml --batch-mode -U -e -s ${SETTINGS_XML} -P-modules -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true clean install
-        # mvn --file prj/pom.xml --batch-mode -e -s ${SETTINGS_XML} -Pmodules,-coherence -nsu -Doptional -DskipTests -Dcoherence.SkipLargeMemoryTests=true -Dcoherence.compatability.settings=${SETTINGS_XML} clean install
-        # popd
-        # pushd tests/install
-        # mvn install:install-file -Dfile=coherence-25.09.jar -DgroupId=com.oracle.coherence.ce -DartifactId=coherence -Dversion=25.09 -Dpackaging=jar
-        # mvn install:install-file -Dfile=jakarta.el-api-5.0.1.jar -DgroupId=jakarta.el -DartifactId=jakarta.el-api -Dversion=5.0.1 -Dpackaging=jar
-        # popd
+        java-version: '17'
 
     # Build
     - name: Build
@@ -119,62 +89,30 @@ jobs:
         dotnet build --configuration Release --no-restore
 
     # Build test server
-    # - name: Build test server
-    #   run: |
-    #     pushd tests/test-server
-    #     # mvn --batch-mode -e clean install -s .mvn/settings.xml -Drevision=25.12 -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer
-    #     popd
+    - name: Build test server
+      run: |
+        pushd tests/test-server
+        mvn --batch-mode -e clean install -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer
+        popd
 
     # Start test server
     - name: Start test server
       run: |
-        # pushd tests/test-server
-        pushd tests/run
-        # mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=25.12 -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer &
-        java -cp test-server-25.12.jar:jakarta.el-api-5.0.1.jar:coherence-25.12.jar -Dcoherence.log=DefaultCacheServer.log com.tangosol.net.Coherence &
-        sleep 10
+        pushd tests/test-server
+        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer &
+        sleep 30
         popd
         
     # Start test server
-    - name: Start second test server
+    - name: Start test server
       run: |
-        # pushd tests/test-server
-        pushd tests/run
-        # mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=25.12 -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer -Dexec.args="-Dcoherence.log=DefaultCacheServer2.log -Dcoherence.log.level=6 -Dtangosol.coherence.proxy.port=12345 -Dcoherence.proxy.port1=3001 -Dtangosol.coherence.proxy.port5=3002 -Dtangosol.coherence.proxy.port4=3003 -Dtangosol.coherence.proxy.port2=3004 -Dtangosol.coherence.proxy.port11=3005 -Dtangosol.coherence.proxy.port12=3006 -Dtangosol.coherence.proxy.port7=3007 -Dtangosol.coherence.proxy.port9=3008 -Dtangosol.coherence.proxy.port8=3009 -Dcoherence.management=all -Dcoherence.health.http.port=33333 -Dtangosol.coherence.messaging.debug=true -cp %classpath com.tangosol.net.Coherence" &
-        java -cp test-server-25.12.jar:jakarta.el-api-5.0.1.jar:coherence-25.12.jar -Dcoherence.log=DefaultCacheServer2.log -Dcoherence.log.level=6 -Dtangosol.coherence.proxy.port=12345 -Dcoherence.proxy.port1=3001 -Dtangosol.coherence.proxy.port5=3002 -Dtangosol.coherence.proxy.port4=3003 -Dtangosol.coherence.proxy.port2=3004 -Dtangosol.coherence.proxy.port11=3005 -Dtangosol.coherence.proxy.port12=3006 -Dtangosol.coherence.proxy.port7=3007 -Dtangosol.coherence.proxy.port9=3008 -Dtangosol.coherence.proxy.port8=3009 -Dcoherence.health.http.port=33333 -Dcoherence.management=all com.tangosol.net.Coherence &
+        pushd tests/test-server
+        mvn --batch-mode -e exec:exec -s .mvn/settings.xml -Drevision=${{ matrix.coherence_version }} -Dcoherence.groupid=com.oracle.coherence.ce -Dmain=com.tangosol.net.DefaultCacheServer -Dexec.args="-Dcoherence.log=../../build/DefaultCacheServer2.log -Dtangosol.coherence.proxy.port=12345 -Dcoherence.proxy.port1=3001 -Dtangosol.coherence.proxy.port5=3002 -Dtangosol.coherence.proxy.port4=3003 -Dtangosol.coherence.proxy.port2=3004 -Dtangosol.coherence.proxy.port11=3005 -Dtangosol.coherence.proxy.port12=3006 -Dtangosol.coherence.proxy.port7=3007 -Dtangosol.coherence.proxy.port9=3008 -Dtangosol.coherence.proxy.port8=3009 -Dcoherence.management=all -cp %classpath com.tangosol.net.DefaultCacheServer" &
         sleep 30
         popd
 
-    - name: Retry curl until cluster is ready
-      id: curl_check
-      run: |
-        max_attempts=60
-        attempt=1
-        url="http://localhost:33333/ready"
-        expected_response="200"
-        
-        while [ $attempt -le $max_attempts ]; do
-          response=$(curl -s -o /dev/null -w %{http_code} "$url")
-          echo "Attempt $attempt: Response - $response"
-
-          if [ "$response" != "$expected_response" ]; then
-            echo "Received incorrect response. Retrying..."
-            sleep 5
-          else
-            echo "Correct response received. Exiting..."
-            exit 0
-          fi
-
-          sleep 5
-          attempt=$((attempt + 1))
-        done
-
-        echo "All attempts failed."
-        exit 1  # Fails the step if all attempts fail
-
-    # Run Tests
     # Run Tests with .net 6
-    - name: Run Tests 6
+    - name: Run Tests
       run: dotnet test --framework net6.0 --filter FullyQualifiedName\!~Tangosol.Web --configuration Release --no-restore
 
     # Run Tests with .net 8
@@ -183,14 +121,7 @@ jobs:
 
     # Capture server log for diagnosing failures
     - name: Capture test logs
-      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
-        name: build-output-${{ matrix.os }}-${{ matrix.coherence_version }}
-        path: |
-          tests/run/
-          build/
-          ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/tests/test-server/
-          ~/work/coherence-dotnet-extend-client/coherence-dotnet-extend-client/build/
-        compression-level: 9
-
+        name: build-output
+        path: build\**\*.log
