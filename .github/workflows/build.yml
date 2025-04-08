@@ -122,6 +122,7 @@ jobs:
 
     # Capture server log for diagnosing failures
     - name: Capture test logs
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: build-output
