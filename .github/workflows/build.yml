@@ -124,6 +124,5 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
-        name: build-output-${{ matrix.coherence_version }}
-        path: |
-          tests/**/*.log
+        name: build-output-all-${{ matrix.coherence_version }}
+        path: ./*
